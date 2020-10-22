@@ -1,0 +1,45 @@
+{
+    "name": "pae_movies",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "npm run styles:watch | npm run scripts:watch | http-server  -p 4046",
+        "dev": " npm run styles:watch | npm run scripts:watch | nodemon . ",
+        "styles": "sass src/styles:public/styles --no-source-map",
+        "styles:watch": "sass src/styles:public/styles --no-source-map --watch",
+        "scripts": "tsc",
+        "scripts:watch": "tsc --watch",
+        "open": "open-cli http://localhost:4046",
+        "build": "gulp",
+        "prod": "http-server dist"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kevinmorenom/PAE_Movies.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/kevinmorenom/PAE_Movies/issues"
+    },
+    "homepage": "https://github.com/kevinmorenom/PAE_Movies#readme",
+    "devDependencies": {
+        "gulp": "^4.0.2",
+        "handlebars": "^4.7.6",
+        "http-server": "^0.12.3",
+        "node-fetch": "^2.6.1",
+        "open-cli": "^6.0.1",
+        "sass": "^1.27.0",
+        "typescript": "^4.0.3"
+    },
+    "dependencies": {
+        "axios": "^0.20.0",
+        "body-parser": "^1.19.0",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "express-handlebars": "^5.1.0",
+        "mongodb": "^3.6.2"
+    }
+}
