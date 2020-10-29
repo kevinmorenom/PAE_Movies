@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "a564f41b-0657-495b-84b1-18d82808e48d",
+		"name": "MovieTracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Crear Usuario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\":\"alexgodinez\",\r\n    \"correo\":\"alex@gmail.com\",\r\n    \"contraseña\":\"1234\",\r\n    \"foto\":\"foto.jpg\",\r\n    \"vistas\":80\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/postUser",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"postUser"
+					]
+				},
+				"description": "Post a user in database"
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener Usuario por username",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\":\"alexgodinez\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/getUser",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"getUser"
+					]
+				},
+				"description": "Get user by username from database"
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Lista To Watch",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\":\"alexgodinez\",\r\n    \"id_peliculas\":[]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/toWatch",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"toWatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get to Watch list by username",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\":\"alexgodinez\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/toWatch",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"toWatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener una pelicula vista por un Usuario",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\":\"alexgodinez\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/getWatched",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"getWatched"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Marcar Pelicula como Vista",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_pelicula\":892,\r\n    \"nombre\":\"Pelicula 1\",\r\n    \"poster\":\"blabla.jpg\",\r\n    \"usuario\":\"juanramos\",\r\n    \"calificacion\":9\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/postWatched",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"postWatched"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar usuario",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\":\"alexgodinez\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/deleteUser",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"deleteUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Desmarcar pelicula vista",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\":\"kevinmorenom\",\r\n    \"id_pelicula\":5004\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/deleteWatched",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"deleteWatched"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
