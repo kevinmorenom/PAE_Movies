@@ -11,8 +11,9 @@ const apiRoutes = require('./routes');
 // const apiNews = require('./api');
 // app.use('/api', apiNews);
 
+app.use('/', jsonParser);
 app.use('/', apiRoutes);
-app.use('/api', jsonParser);
+
 app.use('/assets', express.static(path.join(__dirname, 'public')));
 
 app.engine('handlebars', handlebars());

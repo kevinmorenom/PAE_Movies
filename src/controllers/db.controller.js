@@ -15,8 +15,26 @@ function conectMongo(collectionName) {
                 const db = client.db();
                 const collection = db.collection(collectionName);
                 resolve({
-                    find: function(callback) {
-                        collection.find().limit(1).toArray(function(err, results) {
+                    find: function(data, callback) {
+                        collection.find(data).toArray(function(err, results) {
+                            callback(results);
+                            client.close();
+                        });
+                    },
+                    insert: function(data, callback) {
+                        collection.insertOne(data, function(err, results) {
+                            callback(results);
+                            client.close();
+                        });
+                    },
+                    update: function(data, callback) {
+                        collection.updateOne({ "usuario": "kevinmorenom" }, { $set: { "": 1 } }, function(err, results) {
+                            callback(results);
+                            client.close();
+                        });
+                    },
+                    delete: function(data, callback) {
+                        collection.deleteOne(data, function(err, results) {
                             callback(results);
                             client.close();
                         });

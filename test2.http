@@ -1,0 +1,23 @@
+@host = http://localhost:3000
+
+POST {{host}}/PostUser
+Content-Type: application/json
+
+{
+    "email":"Test@Test",
+    "password":"123abc"
+}
+
+###
+GET {{host}}/api/users/Test@Test
+
+###
+PUT {{host}}/api/users/Test@Test
+Content-Type: application/json
+
+{
+    "password":"newPass"
+}
+
+###
+DELETE {{host}}/api/users/Test@Test
