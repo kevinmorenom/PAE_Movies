@@ -6,7 +6,54 @@ require('dotenv').config();
 const apiUrl = process.env.API_URL;
 const apiKey = process.env.API_KEY;
 
-class Movies {
+class Watched {
+
+    getWatched(req, res) {
+        MongoConnect('Watched')
+            .then(
+                function(collection) {
+                    collection.find(req.body, function(results) {
+                        res.render('index', {
+                            body: JSON.stringify(results)
+
+                        });
+                    });
+                }
+            )
+            .catch(function() {
+                res.send("ERROR");
+            });
+    }
+
+    postWatched(req, res) {
+        console.log(req.body);
+        MongoConnect('Watched')
+            .then(
+                function(collection) {
+                    collection.insert(req.body, function(results) {
+                        res.send(results);
+                    });
+                }
+            )
+            .catch(function() {
+                res.send("ERROR");
+            });
+    }
+
+    deleteWatched(req, res) {
+        console.log(req.body);
+        MongoConnect('Watched')
+            .then(
+                function(collection) {
+                    collection.delete(req.body, function(results) {
+                        res.send('Deleted');
+                    });
+                }
+            )
+            .catch(function() {
+                res.send("ERROR");
+            });
+    }
 
     getOne(req, res) {
         const url = `${apiUrl}popular?api_key=${apiKey}&language=en-US&page=1`;
@@ -39,4 +86,4 @@ class Movies {
 
 }
 
-module.exports = new Movies();
+module.exports = new Watched();

@@ -27,8 +27,8 @@ function conectMongo(collectionName) {
                             client.close();
                         });
                     },
-                    update: function(data, callback) {
-                        collection.updateOne({ "usuario": "kevinmorenom" }, { $set: { "": 1 } }, function(err, results) {
+                    update: function(filter, data, callback) {
+                        collection.updateOne({ "_id": ObjectId(filter) }, { $set: data }, function(err, results) {
                             callback(results);
                             client.close();
                         });
