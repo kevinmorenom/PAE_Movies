@@ -56,7 +56,7 @@ class Watched {
     }
 
     getOne(req, res) {
-        const url = `${apiUrl}popular?api_key=${apiKey}&language=en-US&page=1`;
+        const url = `${apiUrl}/movie/popular?api_key=${apiKey}&language=en-US&page=1`;
         axios.get(url).then(response => {
             res.render('popular', {
                 title: response.data.results[0].title,
@@ -71,7 +71,7 @@ class Watched {
     }
 
     getPopular(req, res) {
-        const url = `${apiUrl}popular?api_key=${apiKey}&language=en-US&page=1`;
+        const url = `${apiUrl}/movie/popular?api_key=${apiKey}&language=en-US&page=1`;
         axios.get(url).then(response => {
             res.send(response.data.results
                 // popularity: response.data.results[0].popularity,
