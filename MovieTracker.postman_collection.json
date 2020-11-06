@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"alexgodinez\",\r\n    \"correo\":\"alex@gmail.com\",\r\n    \"contraseña\":\"1234\",\r\n    \"foto\":\"foto.jpg\",\r\n    \"vistas\":80\r\n}",
+					"raw": "{\r\n    \"usuario\":\"lolo\",\r\n    \"correo\":\"muna@gmail.com\",\r\n    \"contraseña\":\"1234\",\r\n    \"foto\":\"foto.jpg\",\r\n    \"vistas\":80\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,12 +20,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/postUser",
+					"raw": "{{host}}/user/post",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"postUser"
+						"user",
+						"post"
 					]
 				},
 				"description": "Post a user in database"
@@ -42,7 +43,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"alexgodinez\"\r\n}",
+					"raw": "{\r\n    \"_id\":\"5f98de2f9f07e770c9a8fa41\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -50,12 +51,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/getUser",
+					"raw": "{{host}}/user/get/alexgodinez",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"getUser"
+						"user",
+						"get",
+						"alexgodinez"
 					]
 				},
 				"description": "Get user by username from database"
@@ -69,7 +72,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"alexgodinez\",\r\n    \"id_peliculas\":[]\r\n}",
+					"raw": "{\r\n    \"usuario\":\"betogarcia\",\r\n    \"id_peliculas\":[]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -77,12 +80,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/toWatch",
+					"raw": "{{host}}/toWatch/post",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"toWatch"
+						"toWatch",
+						"post"
 					]
 				}
 			},
@@ -106,12 +110,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/toWatch",
+					"raw": "{{host}}/toWatch/get",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"toWatch"
+						"toWatch",
+						"get"
 					]
 				}
 			},
@@ -127,7 +132,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"alexgodinez\"\r\n}",
+					"raw": "{\r\n    \"usuario\":\"kevinmorenom\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -135,12 +140,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/getWatched",
+					"raw": "{{host}}/watched/get",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"getWatched"
+						"watched",
+						"get"
 					]
 				}
 			},
@@ -153,7 +159,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id_pelicula\":892,\r\n    \"nombre\":\"Pelicula 1\",\r\n    \"poster\":\"blabla.jpg\",\r\n    \"usuario\":\"juanramos\",\r\n    \"calificacion\":9\r\n}",
+					"raw": "{\r\n    \"id_pelicula\":8888,\r\n    \"nombre\":\"Pelicula 3\",\r\n    \"poster\":\"blabla.jpg\",\r\n    \"usuario\":\"kevinmorenom\",\r\n    \"calificacion\":9\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -161,12 +167,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/postWatched",
+					"raw": "{{host}}/watched/post",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"postWatched"
+						"watched",
+						"post"
 					]
 				}
 			},
@@ -187,12 +194,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/deleteUser",
+					"raw": "{{host}}/user/delete",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"deleteUser"
+						"user",
+						"delete"
 					]
 				}
 			},
@@ -205,7 +213,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"kevinmorenom\",\r\n    \"id_pelicula\":5004\r\n}",
+					"raw": "{\r\n    \"usuario\":\"kevinmorenom\",\r\n    \"id_pelicula\":8888\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -213,12 +221,41 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/deleteWatched",
+					"raw": "{{host}}/watched/delete",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"deleteWatched"
+						"watched",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Editar usuario por ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"correo\":\"kevin@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/user/update/5f98de2f9f07e770c9a8fa41",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"update",
+						"5f98de2f9f07e770c9a8fa41"
 					]
 				}
 			},
