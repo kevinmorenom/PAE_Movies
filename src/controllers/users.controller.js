@@ -41,6 +41,8 @@ class Users {
                 function(collection) {
                     const hashedPassword = getHashedPassword(req.body.contraseña);
                     collection.insert({
+                        firstName: req.body.firstName,
+                        lastName:req.body.lastName,
                         usuario: req.body.usuario,
                         correo: req.body.correo,
                         contraseña: hashedPassword,
