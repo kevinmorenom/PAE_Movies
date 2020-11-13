@@ -38,6 +38,28 @@ function conectMongo(collectionName) {
                             callback(results);
                             client.close();
                         });
+                    },
+                    findOne: (filters) => {
+                        filters = filters || {};
+                        return new Promise((resolve, reject) => {
+                            collection.findOne(filters).then((results) => {
+                                resolve(results);
+                                client.close();
+                            }).catch(err => {
+                                reject(err);
+                            })
+                        });
+                    },
+                    insertOne: (filters) => {
+                        filters = filters || {};
+                        return new Promise((resolve, reject) => {
+                            collection.insertOne(filters).then((result) => {
+                                resolve(result);
+                                client.close();
+                            }).catch(err => {
+                                reject(err);
+                            })
+                        });
                     }
                 });
             }

@@ -12,7 +12,7 @@ const usersController = require('./../src/controllers/users.controller');
  *          200:
  *              description: get Data from DataBase and render with handlebars
  */
-router.get('/get/:usuario', usersController.getOneUser);
+router.get('/get', usersController.getOneUser);
 
 /**
  * @swagger
@@ -45,6 +45,17 @@ router.delete('/delete', usersController.deleteUser);
  *          200:
  *              description: updated user
  */
-router.put('/update/:_id', usersController.updateUser);
+router.put('/update/:usuario', usersController.updateUser);
+
+/**
+ * @swagger
+ * /:
+ *  post:
+ *      description: User Login
+ *      responses: 
+ *          200:
+ *              description: post token in db
+ */
+router.post('/login', usersController.login);
 
 module.exports = router;

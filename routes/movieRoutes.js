@@ -25,4 +25,26 @@ router.get('/popular', movieController.getOne);
  */
 router.get('/populars', movieController.getPopular);
 
+/**
+ * @swagger
+ * /search:
+ *  get:
+ *      description: search movies from API
+ *      responses: 
+ *          200:
+ *              description:Array of movies matching title with query string
+ */
+router.get('/search', movieController.search);
+
+/**
+ * @swagger
+ * /similar:
+ *  get:
+ *      description: search movies from API
+ *      responses: 
+ *          200:
+ *              description:Array of movies matching title with query string
+ */
+router.get('/similar', movieController.getSimilar);
+
 module.exports = router;

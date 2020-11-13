@@ -28,11 +28,7 @@ class Movies {
         const url = `${apiUrl}/movie/popular?api_key=${apiKey}&language=en-US&page=1`;
         console.log(url);
         axios.get(url).then(response => {
-            res.send(response.data.results
-                // popularity: response.data.results[0].popularity,
-                // poster: 'http://image.tmdb.org/t/p/original/' + response.data.results[0].poster_path,
-                // language: response.data.results[0].original_language
-            );
+            res.send(response.data.results);
         }).catch(err => {
             res.send('Failure');
             res.end();
@@ -40,7 +36,11 @@ class Movies {
     }
 
     search(req, res) {
-        const url = `${apiUrl}/movie/popular?api_key=${apiKey}&language=en-US&page=1`;
+        console.log(req.query);
+        let query = req.query.query || '';
+        let year = req.query.year || '';
+        const url = `${apiUrl}/search/movie?api_key=${apiKey}&query=${query}&year=${year}`;
+        console.log(url);
         axios.get(url).then(response => {
             res.send(response.data.results
                 // popularity: response.data.results[0].popularity,
@@ -52,6 +52,18 @@ class Movies {
             res.end();
         });
     }
+
+    getSimilar(req, res) {
+        const url = `${apiUrl}/movie/${req.query.id}/similar?api_key=${apiKey}&language=en-US`;
+        console.log(url);
+        axios.get(url).then(response => {
+            res.send(response.data.results);
+        }).catch(err => {
+            res.send('Failure');
+            res.end();
+        });
+    }
+
 
 }
 
