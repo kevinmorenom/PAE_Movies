@@ -47,4 +47,15 @@ router.get('/search', movieController.search);
  */
 router.get('/similar', movieController.getSimilar);
 
+/**
+ * @swagger
+ * /similar:
+ *  get:
+ *      description: search movies from API
+ *      responses: 
+ *          200:
+ *              description:Array of movies matching title with query string
+ */
+router.get('/get/:category?', movieController.getMovies);
+
 module.exports = router;

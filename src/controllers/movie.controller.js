@@ -64,6 +64,20 @@ class Movies {
         });
     }
 
+    getMovies(req, res) {
+        console.log(req.params.category);
+        const category = req.params.category || 'popular'
+        const url = `${apiUrl}/movie/${category}?api_key=${apiKey}&language=en-US&page=1`;
+        console.log(url);
+        axios.get(url).then(response => {
+            res.send(response.data.results);
+        }).catch(err => {
+            res.send('Failure');
+            res.end();
+        });
+
+    }
+
 
 }
 
