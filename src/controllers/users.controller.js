@@ -161,8 +161,8 @@ class Users {
                         } else {
                             db('Users').then(collection => {
                                 collection.insertOne({
-                                    name: req.body.name,
-                                    email: req.body.email,
+                                    usuario: req.body.name,
+                                    correo: req.body.email,
                                     googleId: req.body.id
                                 }).then(result => {
                                     console.log("ya se creo el usuario", result.ops[0]._id);
