@@ -60,6 +60,20 @@ function conectMongo(collectionName) {
                                 reject(err);
                             })
                         });
+                    },
+                    updateOne: (filters, document) => {
+                        filters = filters || {};
+                        limit = limit || 25;
+                        return new Promise((resolve, reject) => {
+                            collection.updateOne(filters, document, options).toArray((err, results) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    resolve(results);
+                                }
+                                client.close();
+                            })
+                        });
                     }
                 });
             }

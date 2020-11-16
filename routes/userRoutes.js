@@ -58,4 +58,15 @@ router.put('/update/:usuario', usersController.updateUser);
  */
 router.post('/login', usersController.login);
 
+/**
+ * @swagger
+ * /:
+ *  post:
+ *      description: User Login
+ *      responses: 
+ *          200:
+ *              description: post token in db
+ */
+router.post('/login/google', usersController.googleLogin);
+
 module.exports = router;
