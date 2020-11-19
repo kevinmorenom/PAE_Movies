@@ -101,7 +101,7 @@ class Users {
             }).then(results => {
                 if (results) {
                     Token.create(results._id).then(result => {
-                        console.log('Created token: ', result);
+                        // console.log('Created token: ', result);
                         res.send(result.ops[0]);
                     }).catch(err => {
                         console.log('Failed to create token', err);

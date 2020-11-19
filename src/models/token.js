@@ -30,6 +30,15 @@ class Token {
             expire_date: expire_date
         });
     }
+
+    findByToken(token){
+        const now = new Date().getTime();
+        // console.log(token);
+        return this.collection.findOne({
+            token:token,
+            expire_date:{$gt:now}
+        });
+    }
 }
 
 module.exports = new Token();
