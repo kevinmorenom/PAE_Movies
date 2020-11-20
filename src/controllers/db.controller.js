@@ -18,25 +18,25 @@ function conectMongo(collectionName) {
                     find: function(data, callback) {
                         collection.find(data).toArray(function(err, results) {
                             callback(results);
-                            
+
                         });
                     },
                     insert: function(data, callback) {
                         collection.insertOne(data, function(err, results) {
                             callback(results);
-                            
+
                         });
                     },
                     update: function(filter, data, callback) {
                         collection.updateOne({ "_id": ObjectId(filter) }, { $set: data }, function(err, results) {
                             callback(results);
-                            
+
                         });
                     },
                     delete: function(data, callback) {
                         collection.deleteOne(data, function(err, results) {
                             callback(results);
-                            
+
                         });
                     },
                     findOne: (filters) => {
@@ -44,7 +44,7 @@ function conectMongo(collectionName) {
                         return new Promise((resolve, reject) => {
                             collection.findOne(filters).then((results) => {
                                 resolve(results);
-                                
+                                client.close();
                             }).catch(err => {
                                 reject(err);
                             })
@@ -55,7 +55,7 @@ function conectMongo(collectionName) {
                         return new Promise((resolve, reject) => {
                             collection.insertOne(filters).then((result) => {
                                 resolve(result);
-                                
+                                client.close();
                             }).catch(err => {
                                 reject(err);
                             })
@@ -71,7 +71,7 @@ function conectMongo(collectionName) {
                                 } else {
                                     resolve(results);
                                 }
-                                
+
                             })
                         });
                     }

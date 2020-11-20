@@ -9,13 +9,14 @@ const apiKey = process.env.API_KEY;
 const Token = require('./../models/token');
 const { OAuth2Client } = require('google-auth-library');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const User = require('./../models/user');
 
 function getHashedPassword(pwd) {
     const hashedPassword = crypto.scryptSync(pwd, 'salt', 24).toString('hex');
     return hashedPassword;
 }
 
-class Users {
+class UserController {
     getOneUser(req, res) {
         db('Users')
             .then(
@@ -92,121 +93,112 @@ class Users {
     }
 
     login(req, res) {
-        console.log(req.body);
-        db('Users').then(collection => {
-            const hashedPassword = getHashedPassword(req.body.contraseña);
-            collection.findOne({
-                correo: req.body.correo,
-                contraseña: hashedPassword
-            }).then(results => {
-                if (results) {
-                    Token.create(results._id).then(result => {
-                        // console.log('Created token: ', result);
-                        res.send(result.ops[0]);
-                    }).catch(err => {
-                        console.log('Failed to create token', err);
-                        res.status(404).send();
-                    })
-                } else {
+        const hashedPassword = getHashedPassword(req.body.contraseña);
+        User.validate(req.body.correo, hashedPassword).then(result => {
+            if (result) {
+                Token.create(result._id).then(tokenResult => {
+                    // console.log('Created token: ', tokenResult);
+                    res.send(tokenResult.ops[0]);
+                }).catch(err => {
+                    console.log('Failed to create token', err);
                     res.status(404).send();
-                }
-            }).catch(err => {
-                console.log('Error: ', err);
-                res.send(err);
-            });
+                });
+            } else {
+                res.status(400).send();
+            }
         }).catch(err => {
-            res.send(err);
+            console.log(err);
+            res.status(400).send();
+        })
+    }
+
+    getOne(req, res) {
+        console.log(req.query);
+        User.findOne({
+            email: req.query.email
+        }).then(result => {
+            res.send(result);
+        }).catch(err => {
+            res.status(400).send(err);
         })
     }
 
     googleLogin(req, res) {
-            googleClient.verifyIdToken({
-                idToken: req.body.idToken
-            }).then(googleResponse => {
-                const responseData = googleResponse.getPayload();
-                const email = responseData.email;
-                db('Users').then(collection => {
-                    collection.findOne({ "email": email }).then(results => {
-                        if (results) {
-                            console.log('Found user: ', results);
-                            if (!results.googleId) {
-                                console.log('Does not have google ID');
-                                db('users').then(collection => {
-                                    collection.updateOne({ "email": email }, {
-                                        $set: {
-                                            googleId: req.body.id
-                                        }
-                                    }).then(results => {
-                                        Token.create(results._id).then(result => {
-                                                // console.log('Created token: ', result);
-                                                res.send(result.ops[0]);
-                                            }).catch(err => {
-                                                console.log('Failed to create token', err);
-                                                res.status(404).send();
-                                            }) // res.send(results);
-                                    });
-                                }).catch(err => {
-                                    res.send(err);
-                                })
-                            } else {
-                                console.log('Already has google ID', results._id);
-                                Token.create(results._id).then(result => {
-                                    // console.log('Created token: ', result);
-                                    res.send(result.ops[0]);
-                                }).catch(err => {
-                                    console.log('Failed to create token', err);
-                                    res.status(404).send();
-                                })
+
+        googleClient.verifyIdToken({
+            idToken: req.body.idToken
+        }).then(googleResponse => {
+            const responseData = googleResponse.getPayload();
+            const email = responseData.email;
+            User.findOne({
+                correo: email
+            }).then(response => {
+                if (response) {
+                    console.log('Found existing user');
+                    if (!response.googleId) {
+                        console.log('Does not have google ID');
+                        User.updateOne({
+                            correo: email
+                        }, {
+                            $set: {
+                                googleId: req.body.id
                             }
-                        } else {
-                            db('Users').then(collection => {
-                                collection.insertOne({
-                                    usuario: req.body.name,
-                                    correo: req.body.email,
-                                    googleId: req.body.id
-                                }).then(result => {
-                                    console.log("ya se creo el usuario", result.ops[0]._id);
-                                    Token.create(result.ops[0]._id).then(result => {
-                                        // console.log('Created token: ', result);
-                                        res.send(result.ops[0]);
-                                    }).catch(err => {
-                                        console.log('Failed to create token', err);
-                                        res.status(404).send();
-                                    })
-                                }).catch(err => {
-                                    console.log('Error: ', err);
-                                    res.status(400).send(err);
-                                });
-                            }).catch(err => {
-                                console.log('Error', err);
-                                res.status(400).send(err);
-                            })
-                        }
+                        }).then(() => {
+                            UserController.createToken(response._id, res);
+                        }).catch(err => {
+                            console.log('Failed to update user', err);
+                        });
+                    } else {
+                        console.log('Already has google ID');
+                        UserController.createToken(response._id, res);
+                    }
+                } else {
+                    // Crear
+                    console.log('This is a new user');
+                    User.create({
+                        usuario: req.body.name,
+                        correo: email,
+                        googleId: req.body.id
+                    }).then(response => {
+                        UserController.createToken(response.insertedId, res);
                     });
-                }).catch(err => {
-                    console.log('Failed to google login', err);;
-                })
+                }
             }).catch(err => {
+                console.log(err);
                 res.status(400).send();
             });
+        }).catch(err => {
+            res.status(400).send();
+        });
+    }
 
-        }
-        /*googleLogin
-        valido el token con google-auth-library
-        si es valido..
-            busco si existe el usuario con ese correo
-                si si existe
-                    y no tiene un googleId 
-                        se lo agrego 
-                        creo Token
-                    y si si tiene googleId 
-                        solo creo Token
-                si no existe el usuario
-                    creo el usuario con usuario,correo y googleId
-                    creo el token
-        si el token no es valido es error
-        */
+    /*googleLogin
+    valido el token con google-auth-library
+    si es valido..
+        busco si existe el usuario con ese correo
+            si si existe
+                y no tiene un googleId 
+                    se lo agrego 
+                    creo Token
+                y si si tiene googleId 
+                    solo creo Token
+            si no existe el usuario
+                creo el usuario con usuario,correo y googleId
+                creo el token
+    si el token no es valido busco error
+    */
+
+    static createToken(userId, res) {
+        // console.log('Will create token now');
+        Token.create(userId).then(tokenResult => {
+            // console.log('Created token: ', tokenResult);
+            res.send(tokenResult.ops[0]);
+        }).catch(err => {
+            console.log('Failed to create token', err);
+            res.status(404).send(err);
+        })
+    }
 
 }
 
-module.exports = new Users();
+module.exports = new UserController();

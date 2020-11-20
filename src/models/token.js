@@ -1,22 +1,21 @@
 const crypto = require('crypto');
 const db = require('./../controllers/db.controller');
+const DBModel = require('./db');
 
-class Token {
+const User = require('./user');
 
-    collection;
+class Token extends DBModel {
 
     constructor() {
-        db('tokens').then(collection => {
-            this.collection = collection;
-        }).catch(err => {
-            res.send(err);
-        })
+        super('tokens');
     }
 
     validate(token, userId) {
-        return this.collection.findOne({
-            userId: userId,
-            token: token
+        const now = new Date().getTime();
+        return this.findOne({
+            userId: this.objectId(userId),
+            token: token,
+            expire_date: { $gt: now }
         });
     }
 
@@ -24,21 +23,80 @@ class Token {
         const date = new Date();
         const expire_date = date.setHours(date.getHours() + 1);
         const token = crypto.scryptSync(userId + new Date().getTime(), 'salt', 48).toString('hex');
-        return this.collection.insertOne({
+
+        return super.create({
             userId: userId,
             token: token,
             expire_date: expire_date
+        }, { timestamps: false });
+    }
+
+    findByToken(token) {
+        const now = new Date().getTime();
+        return this.findOne({
+            token: token,
+            expire_date: { $gt: now }
         });
     }
 
-    findByToken(token){
-        const now = new Date().getTime();
-        // console.log(token);
-        return this.collection.findOne({
-            token:token,
-            expire_date:{$gt:now}
-        });
+    findUserByToken(token) {
+        return new Promise((resolve, reject) => {
+            this.findByToken(token).then(response => {
+                User.findById(response.userId).then(user => {
+                    resolve(user);
+                })
+            })
+        })
     }
 }
 
 module.exports = new Token();
+// const crypto = require('crypto');
+// const db = require('./../controllers/db.controller');
+
+// class Token {
+
+//     collection;
+
+//     constructor() {
+//         db('tokens').then(collection => {
+//             this.collection = collection;
+//         }).catch(err => {
+//             res.send(err);
+//         })
+//     }
+
+//     validate(token, userId) {
+//         return this.collection.findOne({
+//             userId: userId,
+//             token: token
+//         });
+//     }
+
+//     create(userId) {
+//         console.log("create token", userId);
+//         const date = new Date();
+//         const expire_date = date.setHours(date.getHours() + 1);
+//         const token = crypto.scryptSync(userId + new Date().getTime(), 'salt', 48).toString('hex');
+//         return this.collection.insertOne({
+//             userId: userId,
+//             token: token,
+//             expire_date: expire_date
+//         });
+//     }
+
+//     findByToken(token) {
+//         console.log(this.collection);
+//         const now = new Date().getTime();
+//         return this.collection.findOne({
+//             token: token,
+//             expire_date: { $gt: now }
+//         });
+//     }
+
+//     findUserByToken(token) {
+//         console.log(token);
+//     }
+// }
+
+// module.exports = new Token();
