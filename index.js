@@ -45,6 +45,42 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log('App is runnings in port ' + port);
 });
+
+const socketIo = require('socket.io');
+const io = socketIo(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET','POST','UPDATE','DELETE'],
+        allowedHeaders: ['authorization']
+    }
+});
+
+io.on('connection', socket =>{
+    console.log('Usuario conectado');
+    const authToken = socket.handshake.headers['authorization'];
+    const token = require('./src/models/token');
+
+    let userName = '';
+
+    token.findUserByToken(authToken).then(user =>{
+        userName = user.usuario;
+        console.log({user});
+        console.log('Connected '+ userName);
+    }).catch(err =>{
+        console.log(err);
+    });
+
+    socket.on('disconnect', ()=>{
+        console.log('User disconnected');
+    })
+
+    socket.on('watchedMovies', (data)=>{
+        console.log('User watched movie: ', data.original_title);
+
+        socket.broadcast.emit('watchedMovies', {...data, user: userName});
+    })
+});
+
