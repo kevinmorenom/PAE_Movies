@@ -9,8 +9,29 @@ const jsonParser = bodyParser.json();
 const MongoConnect = require('./src/controllers/db.controller');
 const apiRoutes = require('./routes');
 const cors = require('cors');
+const multer = require('multer');
 // const apiNews = require('./api');
 // app.use('/api', apiNews);
+
+const multerStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads')
+      },
+      filename: function (req, file, cb) {
+        const ext = file.originalname.split('.').pop();
+        cb(null, `${file.fieldname}-${Date.now()}.${ext}`)
+      }
+});
+
+const upload = multer({ storage: multerStorage, fileFilter: (req, file, cb) => {
+    const flag = file.mimetype.startsWith('image');
+    cb(null, flag);
+} });
+
+app.post('/PP', upload.single('image'), (req,res) => {
+    res.send('Archivo subido');
+    console.log("ARchivo subido")
+})
 
 app.use(cors());
 app.use('/', jsonParser);
