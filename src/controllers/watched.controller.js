@@ -5,18 +5,23 @@ require('dotenv').config();
 
 const apiUrl = process.env.API_URL;
 const apiKey = process.env.API_KEY;
+const Token = require('./../models/token');
 
 class Watched {
 
     getWatched(req, res) {
+        let userMail = '';
+        Token.findUserByToken(req.headers.authorization).then(user => {
+            userMail = user.correo;
+            console.log({ user });
+        }).catch(err => {
+            console.log(err);
+        });
         MongoConnect('Watched')
             .then(
                 function(collection) {
-                    collection.find(req.body, function(results) {
-                        res.render('index', {
-                            body: JSON.stringify(results)
-
-                        });
+                    collection.find({ "correo": userMail }, function(results) {
+                        res.send(results);
                     });
                 }
             )
@@ -26,11 +31,19 @@ class Watched {
     }
 
     postWatched(req, res) {
+        let userMail = '';
+        Token.findUserByToken(req.headers.authorization).then(user => {
+            userMail = user.correo;
+            console.log({ user });
+        }).catch(err => {
+            console.log(err);
+        });
         console.log(req.body);
         MongoConnect('Watched')
             .then(
                 function(collection) {
-                    collection.insert(req.body, function(results) {
+                    collection.insert({...req.body, correo: userMail }, function(results) {
+                        console.log(userMail + ' Vio la pelicula: ' + req.body.original_title);
                         res.send(results);
                     });
                 }

@@ -8,7 +8,7 @@ const apiKey = process.env.API_KEY;
 
 class Movies {
 
-    getOne(req, res) {
+    getOneBack(req, res) {
         const url = `${apiUrl}/movie/popular?api_key=${apiKey}&language=en-US&page=1`;
         console.log(url);
         axios.get(url).then(response => {
@@ -18,6 +18,17 @@ class Movies {
                 poster: 'http://image.tmdb.org/t/p/original/' + response.data.results[0].poster_path,
                 language: response.data.results[0].original_language
             });
+        }).catch(err => {
+            res.send('Failure');
+            res.end();
+        });
+    }
+
+    getOne(req, res) {
+        const url = `${apiUrl}/movie/${req.params.id}?api_key=${apiKey}&language=en-US&page=1`;
+        console.log(url);
+        axios.get(url).then(response => {
+            res.send(response.data);
         }).catch(err => {
             res.send('Failure');
             res.end();
@@ -68,7 +79,7 @@ class Movies {
         // console.log(req.params.category);
         const category = req.params.category || 'popular'
         const url = `${apiUrl}/movie/${category}?api_key=${apiKey}&language=en-US&page=1`;
-        // console.log(url);
+        console.log(url);
         axios.get(url).then(response => {
             res.send(response.data.results);
         }).catch(err => {

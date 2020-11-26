@@ -5,18 +5,29 @@ const movieController = require('../src/controllers/movie.controller');
 
 /**
  * @swagger
- * /popular:
+ * /getOne:
  *  get:
  *      description: get from API
  *      responses: 
  *          200:
- *              description: get data from API and render  with handlebars 
+ *              description: get data from API and render  with handlebars in backend 
  */
-router.get('/popular', movieController.getOne);
+router.get('/getOneBack', movieController.getOneBack);
 
 /**
  * @swagger
- * /popular:
+ * /getOne:
+ *  get:
+ *      description: get from API
+ *      responses: 
+ *          200:
+ *              description: get data from API 
+ */
+router.get('/getOne/:id', movieController.getOne);
+
+/**
+ * @swagger
+ * /populars:
  *  get:
  *      description: get from API
  *      responses: 
