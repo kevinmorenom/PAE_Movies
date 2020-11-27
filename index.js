@@ -10,30 +10,40 @@ const MongoConnect = require('./src/controllers/db.controller');
 const apiRoutes = require('./routes');
 const cors = require('cors');
 const multer = require('multer');
-// const apiNews = require('./api');
-// app.use('/api', apiNews);
+
+app.use(cors());
 
 const multerStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads')
-      },
-      filename: function (req, file, cb) {
+        cb(null, 'public/assets')
+    },
+    filename: function (req, file, cb) {
         const ext = file.originalname.split('.').pop();
-        cb(null, `${file.fieldname}-${Date.now()}.${ext}`)
-      }
+        const token = require('./src/models/token');
+
+        token.findUserByToken(req.headers.authorization).then(user => {
+            let userId = user._id;
+            cb(null, `${userId}.${ext}`)
+        }).catch(err => {
+            console.log(err);
+        });
+        
+    }
 });
 
-const upload = multer({ storage: multerStorage, fileFilter: (req, file, cb) => {
-    const flag = file.mimetype.startsWith('image');
-    cb(null, flag);
-} });
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: (req, file, cb) => {
+        const flag = file.mimetype.startsWith('image');
+        cb(null, flag);
+    }
+});
 
-app.post('/PP', upload.single('image'), (req,res) => {
+app.post('/pp', upload.single('image'), (req, res) => {
     res.send('Archivo subido');
     console.log("ARchivo subido")
 })
 
-app.use(cors());
 app.use('/', jsonParser);
 app.use('/', apiRoutes);
 
@@ -74,34 +84,38 @@ const socketIo = require('socket.io');
 const io = socketIo(server, {
     cors: {
         origin: '*',
-        methods: ['GET','POST','UPDATE','DELETE'],
+        methods: ['GET', 'POST', 'UPDATE', 'DELETE'],
         allowedHeaders: ['authorization']
     }
 });
 
-io.on('connection', socket =>{
+io.on('connection', socket => {
     console.log('Usuario conectado');
     const authToken = socket.handshake.headers['authorization'];
     const token = require('./src/models/token');
 
     let userName = '';
 
-    token.findUserByToken(authToken).then(user =>{
+    token.findUserByToken(authToken).then(user => {
         userName = user.usuario;
-        console.log({user});
-        console.log('Connected '+ userName);
-    }).catch(err =>{
+        console.log({
+            user
+        });
+        console.log('Connected ' + userName);
+    }).catch(err => {
         console.log(err);
     });
 
-    socket.on('disconnect', ()=>{
+    socket.on('disconnect', () => {
         console.log('User disconnected');
     })
 
-    socket.on('watchedMovies', (data)=>{
+    socket.on('watchedMovies', (data) => {
         console.log('User watched movie: ', data.original_title);
 
-        socket.broadcast.emit('watchedMovies', {...data, user: userName});
+        socket.broadcast.emit('watchedMovies', {
+            ...data,
+            user: userName
+        });
     })
 });
-

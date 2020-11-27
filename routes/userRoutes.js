@@ -69,4 +69,15 @@ router.post('/login', usersController.login);
  */
 router.post('/login/google', usersController.googleLogin);
 
+/**
+ * @swagger
+ * /:
+ *  get:
+ *      description: get from Database
+ *      responses: 
+ *          200:
+ *              description: get Data from DataBase and render with handlebars
+ */
+router.get('/getByToken', usersController.getUserByToken);
+
 module.exports = router;

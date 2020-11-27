@@ -199,6 +199,15 @@ class UserController {
         })
     }
 
+    getUserByToken(req,res){
+        Token.findUserByToken(req.headers.authorization).then(data =>{
+            res.send(data);
+        }).catch(err => {
+            console.log(err);
+            res.status(404).send(err);
+        })
+    }
+
 }
 
 module.exports = new UserController();
