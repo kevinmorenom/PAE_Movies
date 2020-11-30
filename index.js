@@ -15,7 +15,7 @@ app.use(cors());
 
 const multerStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/assets')
+        cb(null, 'public/pps')
     },
     filename: function (req, file, cb) {
         const ext = file.originalname.split('.').pop();

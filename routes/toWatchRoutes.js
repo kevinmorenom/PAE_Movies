@@ -12,7 +12,7 @@ const toWatchController = require('./../src/controllers/toWatch.controller');
  *          200:
  *              description: get Data from DataBase and render with handlebars
  */
-router.get('/get', toWatchController.getOneToWatch);
+router.get('/get', toWatchController.getToWatch);
 
 
 /**
@@ -24,6 +24,18 @@ router.get('/get', toWatchController.getOneToWatch);
  *          200:
  *              description: success
  */
-router.post('/post', toWatchController.postOneToWatch);
+router.post('/post', toWatchController.postToWatch);
+
+/**
+ * @swagger
+ * /:
+ *  delete:
+ *      description: create a To Watch List for a User 
+ *      responses: 
+ *          200:
+ *              description: success
+ */
+router.delete('/delete/:id', toWatchController.deleteToWatch);
+
 
 module.exports = router;

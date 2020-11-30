@@ -34,9 +34,9 @@ function conectMongo(collectionName) {
                         });
                     },
                     delete: function(data, callback) {
+                        console.log("This is the data:",data)
                         collection.deleteOne(data, function(err, results) {
                             callback(results);
-
                         });
                     },
                     findOne: (filters) => {
