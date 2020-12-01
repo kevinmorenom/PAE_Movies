@@ -22,8 +22,8 @@ class UserController {
             .then(
                 function(collection) {
                     collection.findOne(req.body, function(results) {
-                        console.log(req.body);
-                        console.log(results);
+                        // console.log(req.body);
+                        // console.log(results);
 
                         res.send(results);
                         // res.render('index', {
@@ -199,8 +199,8 @@ class UserController {
         })
     }
 
-    getUserByToken(req,res){
-        Token.findUserByToken(req.headers.authorization).then(data =>{
+    getUserByToken(req, res) {
+        Token.findUserByToken(req.headers.authorization).then(data => {
             res.send(data);
         }).catch(err => {
             console.log(err);

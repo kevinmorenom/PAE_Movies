@@ -14,10 +14,10 @@ const multer = require('multer');
 app.use(cors());
 
 const multerStorage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, 'public/pps')
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         const ext = file.originalname.split('.').pop();
         const token = require('./src/models/token');
 
@@ -27,7 +27,7 @@ const multerStorage = multer.diskStorage({
         }).catch(err => {
             console.log(err);
         });
-        
+
     }
 });
 
@@ -95,7 +95,7 @@ io.on('connection', socket => {
     const token = require('./src/models/token');
 
     let userName = '';
-
+    console.log(authToken, " se quiere conectar");
     token.findUserByToken(authToken).then(user => {
         userName = user.usuario;
         console.log({

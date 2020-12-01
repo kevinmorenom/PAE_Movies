@@ -42,9 +42,18 @@ class Token extends DBModel {
     findUserByToken(token) {
         return new Promise((resolve, reject) => {
             this.findByToken(token).then(response => {
-                User.findById(response.userId).then(user => {
-                    resolve(user);
-                })
+                // console.log("resultado de FBT", response);
+                if (response) {
+                    User.findById(response.userId).then(user => {
+                        resolve(user);
+                    }).catch(err => {
+                        console.log('no hay token valido');
+                        console.log(err);
+                    })
+                }
+            }).catch(err => {
+                console.log('no hay token valido');
+                console.log(err);
             })
         })
     }
