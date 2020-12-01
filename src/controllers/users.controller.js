@@ -7,7 +7,9 @@ require('dotenv').config();
 const apiUrl = process.env.API_URL;
 const apiKey = process.env.API_KEY;
 const Token = require('./../models/token');
-const { OAuth2Client } = require('google-auth-library');
+const {
+    OAuth2Client
+} = require('google-auth-library');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const User = require('./../models/user');
 
@@ -20,8 +22,8 @@ class UserController {
     getOneUser(req, res) {
         db('Users')
             .then(
-                function(collection) {
-                    collection.findOne(req.body, function(results) {
+                function (collection) {
+                    collection.findOne(req.body, function (results) {
                         // console.log(req.body);
                         // console.log(results);
 
@@ -32,7 +34,7 @@ class UserController {
                     });
                 }
             )
-            .catch(function() {
+            .catch(function () {
                 res.send("ERROR");
             });
     }
@@ -41,7 +43,7 @@ class UserController {
         console.log(req.body);
         db('Users')
             .then(
-                function(collection) {
+                function (collection) {
                     const hashedPassword = getHashedPassword(req.body.contraseña);
                     collection.insert({
                         firstName: req.body.firstName,
@@ -51,7 +53,7 @@ class UserController {
                         contraseña: hashedPassword,
                         foto: "",
                         vistas: 0
-                    }, function(results) {
+                    }, function (results) {
                         res.send(results);
                     });
 
@@ -60,20 +62,20 @@ class UserController {
             .catch(err => {
                 res.send(err);
             });
-           
+
     }
 
     deleteUser(req, res) {
         console.log(req.body);
         db('Users')
             .then(
-                function(collection) {
-                    collection.delete(req.body, function(results) {
+                function (collection) {
+                    collection.delete(req.body, function (results) {
                         res.send('Deleted');
                     });
                 }
             )
-            .catch(function() {
+            .catch(function () {
                 res.send("ERROR");
             });
     }
@@ -83,13 +85,13 @@ class UserController {
         console.log(req.body);
         db('Users')
             .then(
-                function(collection) {
-                    collection.update(req.params.usuario, req.body, function(results) {
+                function (collection) {
+                    collection.update(req.params.usuario, req.body, function (results) {
                         res.send(results);
                     });
                 }
             )
-            .catch(function() {
+            .catch(function () {
                 res.send("ERROR");
             });
     }
@@ -210,6 +212,34 @@ class UserController {
             console.log(err);
             res.status(404).send(err);
         })
+    }
+
+    setPassword(req, res) {
+        let userMail = '';
+        console.log('req', req.body)
+        Token.findUserByToken(req.headers.authorization).then(user => {
+            userMail = user.correo;
+            const hashedPassword = getHashedPassword(req.body.contraseña);
+            User.updateOne({
+                correo: userMail
+            }, {
+                $set: {
+                    contraseña: hashedPassword
+                }
+            }).then(response => {
+                console.log("Cambio la contraseña")
+                console.log('mail', userMail);
+                res.send(response);
+            }).catch(err => {
+                console.log('Failed to update user', err);
+            });
+            console.log({
+                user
+            });
+        }).catch(err => {
+            console.log(err);
+        });
+
     }
 
 }

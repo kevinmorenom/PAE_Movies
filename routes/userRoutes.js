@@ -80,4 +80,16 @@ router.post('/login/google', usersController.googleLogin);
  */
 router.get('/getByToken', usersController.getUserByToken);
 
+/**
+ * @swagger
+ * /:
+ *  update:
+ *      description: get from Database
+ *      responses: 
+ *          200:
+ *              description: get Data from DataBase and render with handlebars
+ */
+router.put('/update', usersController.setPassword);
+
+
 module.exports = router;
