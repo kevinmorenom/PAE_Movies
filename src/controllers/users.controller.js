@@ -54,11 +54,13 @@ class UserController {
                     }, function(results) {
                         res.send(results);
                     });
+
                 }
             )
-            .catch(function() {
-                res.send("ERROR");
+            .catch(err => {
+                res.send(err);
             });
+           
     }
 
     deleteUser(req, res) {
@@ -104,10 +106,12 @@ class UserController {
                     res.status(404).send();
                 });
             } else {
+                console.log("Credenciales malas2", err);
+
                 res.status(400).send();
             }
         }).catch(err => {
-            console.log(err);
+            console.log("Credenciales malas3", err);
             res.status(400).send();
         })
     }

@@ -23,9 +23,9 @@ function authMiddleware(req, res, next) {
 
 router.use("/user", userRoutes);
 router.use("/toWatch", authMiddleware, toWatchRoutes);
-router.use("/watched", watchedRoutes);
-// router.use("/movie", authMiddleware, movieRoutes);
-router.use("/movie", movieRoutes);
+router.use("/watched", authMiddleware, watchedRoutes);
+router.use("/movie", authMiddleware, movieRoutes);
+// router.use("/movie", movieRoutes);
 router.get('/', movieController.getOneBack);
 
 module.exports = router;
