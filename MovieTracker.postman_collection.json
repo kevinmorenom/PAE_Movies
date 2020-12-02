@@ -30,7 +30,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstName\":\"Test\",\r\n    \"lastName\":\"Test\",\r\n    \"usuario\":\"test\",\r\n    \"correo\":\"test5@gmail.com\",\r\n    \"contraseña\":\"12345678\"\r\n}",
+					"raw": "{\r\n    \"firstName\":\"Test\",\r\n    \"lastName\":\"Test\",\r\n    \"usuario\":\"test\",\r\n    \"correo\":\"test980@gmail.com\",\r\n    \"contraseña\":\"12345678\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -48,6 +48,50 @@
 					]
 				},
 				"description": "Post a user in database"
+			},
+			"response": []
+		},
+		{
+			"name": "POST Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "680312eb-13fe-498e-85f9-ad6089d4e7cd",
+						"exec": [
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"token\", jsonData.token);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"correo\":\"test6@gmail.com\",\r\n    \"contraseña\":\"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{heroku}}/user/login",
+					"host": [
+						"{{heroku}}"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
 			},
 			"response": []
 		},
@@ -158,6 +202,58 @@
 			"response": []
 		},
 		{
+			"name": "Marcar Pelicula como Vista",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d4ef713c-580c-4b37-8947-1516695b5a10",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Se insertó en la BD\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.insertedCount).to.eql(1);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":337401,\r\n    \"original_title\":\"Mulan\",\r\n    \"poster_path\":\"/aKx1ARwG55zZ0GpRvU2WrGrCG9o.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{heroku}}/watched/post",
+					"host": [
+						"{{heroku}}"
+					],
+					"path": [
+						"watched",
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get to Watch list by Token",
 			"event": [
 				{
@@ -258,58 +354,6 @@
 			"response": []
 		},
 		{
-			"name": "Marcar Pelicula como Vista",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "d4ef713c-580c-4b37-8947-1516695b5a10",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"pm.test(\"Se insertó en la BD\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.insertedCount).to.eql(1);\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{token}}",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"id\":337401,\r\n    \"original_title\":\"Mulan\",\r\n    \"poster_path\":\"/aKx1ARwG55zZ0GpRvU2WrGrCG9o.jpg\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{heroku}}/watched/post",
-					"host": [
-						"{{heroku}}"
-					],
-					"path": [
-						"watched",
-						"post"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Eliminar de lista ToWatch",
 			"event": [
 				{
@@ -356,6 +400,54 @@
 						"ToWatch",
 						"delete",
 						"337401"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Search movie by title",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "33799309-74a5-44ea-8b1e-77065f6cb005",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{heroku}}/movie/search?query=Devil",
+					"host": [
+						"{{heroku}}"
+					],
+					"path": [
+						"movie",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "Devil",
+							"description": "movie title"
+						}
 					]
 				}
 			},
@@ -413,54 +505,6 @@
 			"response": []
 		},
 		{
-			"name": "GET Search movie by title",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "33799309-74a5-44ea-8b1e-77065f6cb005",
-						"exec": [
-							"pm.test(\"Response time is less than 200ms\", function () {\r",
-							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
-							"});\r",
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{token}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{heroku}}/movie/search?query=Devil",
-					"host": [
-						"{{heroku}}"
-					],
-					"path": [
-						"movie",
-						"search"
-					],
-					"query": [
-						{
-							"key": "query",
-							"value": "Devil",
-							"description": "movie title"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "GET Similar movies",
 			"event": [
 				{
@@ -470,13 +514,6 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"pm.test(\"Body matches string\", function () {\r",
-							"    pm.expect(pm.response.text()).to.include(\"string_you_want_to_search\");\r",
-							"});\r",
-							"pm.test(\"Your test name\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.value).to.eql(100);\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -507,80 +544,6 @@
 							"value": "400160",
 							"description": "movie id"
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST Login",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "afbe4101-21f3-4128-b6cd-77c0107c552f",
-						"exec": [
-							"\r",
-							"var jsonData = pm.response.json();\r",
-							"pm.environment.set(\"token\", jsonData.token);"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"correo\":\"test@gmail.com\",\r\n    \"contraseña\":\"12345678\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{heroku}}/user/login",
-					"host": [
-						"{{heroku}}"
-					],
-					"path": [
-						"user",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "{{host}}/user/delete",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{token}}",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"Poncho\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/user/delete",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"delete"
 					]
 				}
 			},
