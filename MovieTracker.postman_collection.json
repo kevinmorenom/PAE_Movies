@@ -7,12 +7,30 @@
 	"item": [
 		{
 			"name": "Crear Usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "957f8894-f9d2-477e-9b2d-a7036abe27e8",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.result.n).to.eql(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"lolo\",\r\n    \"correo\":\"muna@gmail.com\",\r\n    \"contraseña\":\"1234\",\r\n    \"foto\":\"foto.jpg\",\r\n    \"vistas\":80\r\n}",
+					"raw": "{\r\n    \"firstName\":\"Test\",\r\n    \"lastName\":\"Test\",\r\n    \"usuario\":\"test\",\r\n    \"correo\":\"test5@gmail.com\",\r\n    \"contraseña\":\"12345678\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,9 +38,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/user/post",
+					"raw": "{{heroku}}/user/post",
 					"host": [
-						"{{host}}"
+						"{{heroku}}"
 					],
 					"path": [
 						"user",
@@ -34,16 +52,39 @@
 			"response": []
 		},
 		{
-			"name": "Obtener Usuario por username",
+			"name": "Obtener Usuario por Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dff14b49-ce26-4651-ab88-bc3a5fbb23ce",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"_id\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"_id\":\"5f98de2f9f07e770c9a8fa41\"\r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -51,14 +92,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/user/get/alexgodinez",
+					"raw": "{{heroku}}/user/getByToken",
 					"host": [
-						"{{host}}"
+						"{{heroku}}"
 					],
 					"path": [
 						"user",
-						"get",
-						"alexgodinez"
+						"getByToken"
 					]
 				},
 				"description": "Get user by username from database"
@@ -66,13 +106,38 @@
 			"response": []
 		},
 		{
-			"name": "Crear Lista To Watch",
+			"name": "POST Añadir pelicula a ToWatch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cd4011d7-3da6-41d0-9c13-05d8e018101a",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Se insertó en la BD\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.insertedCount).to.eql(1);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"betogarcia\",\r\n    \"id_peliculas\":[]\r\n}",
+					"raw": "{\r\n    \"id\":337401,\r\n    \"original_title\":\"Mulan\",\r\n    \"poster_path\":\"/aKx1ARwG55zZ0GpRvU2WrGrCG9o.jpg\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -80,9 +145,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/toWatch/post",
+					"raw": "{{heroku}}/toWatch/post",
 					"host": [
-						"{{host}}"
+						"{{heroku}}"
 					],
 					"path": [
 						"toWatch",
@@ -93,16 +158,36 @@
 			"response": []
 		},
 		{
-			"name": "Get to Watch list by username",
+			"name": "Get to Watch list by Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ea9050d1-c4b7-4130-9ec1-9ce18078fbde",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"alexgodinez\"\r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -110,9 +195,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/toWatch/get",
+					"raw": "{{heroku}}/toWatch/get",
 					"host": [
-						"{{host}}"
+						"{{heroku}}"
 					],
 					"path": [
 						"toWatch",
@@ -123,16 +208,36 @@
 			"response": []
 		},
 		{
-			"name": "Obtener una pelicula vista por un Usuario",
+			"name": "Get Watched list by Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bd4b2c8f-25e6-40fc-98f1-9c8c68541f98",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token}}"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"kevinmorenom\"\r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -140,9 +245,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/watched/get",
+					"raw": "{{heroku}}/watched/get",
 					"host": [
-						"{{host}}"
+						"{{heroku}}"
 					],
 					"path": [
 						"watched",
@@ -154,12 +259,37 @@
 		},
 		{
 			"name": "Marcar Pelicula como Vista",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d4ef713c-580c-4b37-8947-1516695b5a10",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Se insertó en la BD\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.insertedCount).to.eql(1);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id_pelicula\":8888,\r\n    \"nombre\":\"Pelicula 3\",\r\n    \"poster\":\"blabla.jpg\",\r\n    \"usuario\":\"kevinmorenom\",\r\n    \"calificacion\":9\r\n}",
+					"raw": "{\r\n    \"id\":337401,\r\n    \"original_title\":\"Mulan\",\r\n    \"poster_path\":\"/aKx1ARwG55zZ0GpRvU2WrGrCG9o.jpg\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -167,9 +297,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/watched/post",
+					"raw": "{{heroku}}/watched/post",
 					"host": [
-						"{{host}}"
+						"{{heroku}}"
 					],
 					"path": [
 						"watched",
@@ -180,13 +310,263 @@
 			"response": []
 		},
 		{
-			"name": "Eliminar usuario",
+			"name": "Eliminar de lista ToWatch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "10f2617d-28da-4f44-a92a-5b1505ba0e44",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.deletedCount).to.eql(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{heroku}}/ToWatch/delete/337401",
+					"host": [
+						"{{heroku}}"
+					],
+					"path": [
+						"ToWatch",
+						"delete",
+						"337401"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Editar contraseña",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "597c269e-795c-4cf9-9443-cd07fd19d345",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.modifiedCount).to.eql(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"contraseña\":\"1234567\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{heroku}}/user/update",
+					"host": [
+						"{{heroku}}"
+					],
+					"path": [
+						"user",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Search movie by title",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "33799309-74a5-44ea-8b1e-77065f6cb005",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{heroku}}/movie/search?query=Devil",
+					"host": [
+						"{{heroku}}"
+					],
+					"path": [
+						"movie",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "Devil",
+							"description": "movie title"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Similar movies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5e161f41-77f0-4a54-bb79-3bfd67bc4aec",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"string_you_want_to_search\");\r",
+							"});\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.value).to.eql(100);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{heroku}}/movie/similar?id=400160",
+					"host": [
+						"{{heroku}}"
+					],
+					"path": [
+						"movie",
+						"similar"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "400160",
+							"description": "movie id"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "afbe4101-21f3-4128-b6cd-77c0107c552f",
+						"exec": [
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"token\", jsonData.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"alexgodinez\"\r\n}",
+					"raw": "{\r\n    \"correo\":\"test@gmail.com\",\r\n    \"contraseña\":\"12345678\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{heroku}}/user/login",
+					"host": [
+						"{{heroku}}"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{host}}/user/delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\":\"Poncho\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -205,61 +585,28 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "1c867097-181a-4fde-b323-822cf5d59f79",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		},
 		{
-			"name": "Desmarcar pelicula vista",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"usuario\":\"kevinmorenom\",\r\n    \"id_pelicula\":8888\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/watched/delete",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"watched",
-						"delete"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Editar usuario por ID",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"correo\":\"kevin@gmail.com\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/user/update/5f98de2f9f07e770c9a8fa41",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"update",
-						"5f98de2f9f07e770c9a8fa41"
-					]
-				}
-			},
-			"response": []
+			"listen": "test",
+			"script": {
+				"id": "e81ca320-47f1-401d-894d-173f8182687c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"protocolProfileBehavior": {}
