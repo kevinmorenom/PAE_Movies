@@ -22,8 +22,8 @@ class UserController {
     getOneUser(req, res) {
         db('Users')
             .then(
-                function (collection) {
-                    collection.findOne(req.body, function (results) {
+                function(collection) {
+                    collection.findOne(req.body, function(results) {
                         // console.log(req.body);
                         // console.log(results);
 
@@ -34,7 +34,7 @@ class UserController {
                     });
                 }
             )
-            .catch(function () {
+            .catch(function() {
                 res.send("ERROR");
             });
     }
@@ -43,7 +43,7 @@ class UserController {
         console.log(req.body);
         db('Users')
             .then(
-                function (collection) {
+                function(collection) {
                     const hashedPassword = getHashedPassword(req.body.contraseña);
                     collection.insert({
                         firstName: req.body.firstName,
@@ -53,7 +53,7 @@ class UserController {
                         contraseña: hashedPassword,
                         foto: "",
                         vistas: 0
-                    }, function (results) {
+                    }, function(results) {
                         res.send(results);
                     });
 
@@ -69,13 +69,13 @@ class UserController {
         console.log(req.body);
         db('Users')
             .then(
-                function (collection) {
-                    collection.delete(req.body, function (results) {
+                function(collection) {
+                    collection.delete(req.body, function(results) {
                         res.send('Deleted');
                     });
                 }
             )
-            .catch(function () {
+            .catch(function() {
                 res.send("ERROR");
             });
     }
@@ -85,13 +85,13 @@ class UserController {
         console.log(req.body);
         db('Users')
             .then(
-                function (collection) {
-                    collection.update(req.params.usuario, req.body, function (results) {
+                function(collection) {
+                    collection.update(req.params.usuario, req.body, function(results) {
                         res.send(results);
                     });
                 }
             )
-            .catch(function () {
+            .catch(function() {
                 res.send("ERROR");
             });
     }
@@ -160,10 +160,13 @@ class UserController {
                     }
                 } else {
                     // Crear
-                    console.log('This is a new user');
+                    console.log('This is a new user ', req.body);
                     User.create({
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
                         usuario: req.body.name,
                         correo: email,
+                        photoUrl: req.body.photoUrl,
                         googleId: req.body.id
                     }).then(response => {
                         UserController.createToken(response.insertedId, res);

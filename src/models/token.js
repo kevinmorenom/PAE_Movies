@@ -39,6 +39,7 @@ class Token extends DBModel {
         });
     }
 
+
     findUserByToken(token) {
         return new Promise((resolve, reject) => {
             this.findByToken(token).then(response => {
