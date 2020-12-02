@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const app = express();
@@ -10,6 +9,10 @@ const MongoConnect = require('./src/controllers/db.controller');
 const apiRoutes = require('./routes');
 const cors = require('cors');
 const multer = require('multer');
+
+if (process.env.NODE_ENV === 'dev') {
+    require('dotenv').config();
+}
 
 app.use(cors());
 

@@ -2,7 +2,9 @@ const express = require('express');
 const axios = require('axios');
 const crypto = require('crypto');
 const db = require('./db.controller');
-require('dotenv').config();
+if (process.env.NODE_ENV === 'dev') {
+    require('dotenv').config();
+}
 
 const apiUrl = process.env.API_URL;
 const apiKey = process.env.API_KEY;

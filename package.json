@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "npm run styles:watch | npm run scripts:watch | http-server  -p 4046",
+        "start": "node .",
         "dev": " npm run styles:watch | npm run scripts:watch | nodemon . ",
         "styles": "sass src/styles:public/styles --no-source-map",
         "styles:watch": "sass src/styles:public/styles --no-source-map --watch",
@@ -13,7 +13,13 @@
         "scripts:watch": "tsc --watch",
         "open": "open-cli http://localhost:4046",
         "build": "gulp",
-        "prod": "http-server dist"
+        "prod": "http-server dist",
+        "serve": "cross-env NODE_ENV=dev nodemon .",
+        "postinstall": "npm run styles | npm run scripts"
+    },
+    "engines": {
+        "node": "12.x",
+        "npm": "6.x"
     },
     "repository": {
         "type": "git",
