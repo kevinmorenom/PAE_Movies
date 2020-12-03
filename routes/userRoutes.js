@@ -5,7 +5,7 @@ const usersController = require('./../src/controllers/users.controller');
 
 /**
  * @swagger
- * /:
+ * /user/get:
  *  get:
  *      description: get from Database
  *      responses: 
