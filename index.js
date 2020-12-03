@@ -72,7 +72,7 @@ const swaggerOptions = {
             "servers": ["http://localhost:" + port]
         }
     },
-    apis: ['index.js', './routes/index.js', './routes/movieRoutes.js']
+    apis: ['index.js', './routes/index.js', './routes/movieRoutes.js', './routes/toWatchRoutes.js']
 }
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
