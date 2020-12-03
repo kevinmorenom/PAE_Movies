@@ -18,7 +18,7 @@ router.get('/get', toWatchController.getToWatch);
 /**
  * @swagger
  * /toWatch/post:
- *  get:
+ *  post:
  *      description: Post in DB a watched movie by the user with the current token
  *      responses: 
  *          200:
@@ -29,7 +29,7 @@ router.post('/post', toWatchController.postToWatch);
 /**
  * @swagger
  * /toWatch/delete/id:
- *  get:
+ *  delete:
  *      description: Delete a movie from the Watched list of the user with the current token
  *      responses: 
  *          200:

@@ -10,84 +10,84 @@ const usersController = require('./../src/controllers/users.controller');
  *      description: get from Database
  *      responses: 
  *          200:
- *              description: get Data from DataBase and render with handlebars
+ *              description:get Data from DataBase and render with handlebars
  */
 router.get('/get', usersController.getOneUser);
 
 /**
  * @swagger
- * /:
+ * /user/post:
  *  post:
  *      description: Post a new User to Database
  *      responses: 
  *          200:
- *              description: Post user to DataBase
+ *              description:user registered correctly
  */
 router.post('/post', usersController.postOneUser);
 
 /**
  * @swagger
- * /:
+ * /user/delete:
  *  delete:
- *      description: delete a new User to Database
+ *      description: delete a user from the database
  *      responses: 
  *          200:
- *              description: delete user to DataBase
+ *              description: user deleted
  */
 router.delete('/delete', usersController.deleteUser);
 
 /**
  * @swagger
- * /:
+ * /user/update/usuario:
  *  put:
- *      description: update a User data
+ *      description: update a User password
  *      responses: 
  *          200:
- *              description: updated user
+ *              description:password updated
  */
 router.put('/update/:usuario', usersController.updateUser);
 
 /**
  * @swagger
- * /:
+ * /user/login:
  *  post:
  *      description: User Login
  *      responses: 
  *          200:
- *              description: post token in db
+ *              description:Login succesful, post token in DB
  */
 router.post('/login', usersController.login);
 
 /**
  * @swagger
- * /:
+ * /user/login/google:
  *  post:
- *      description: User Login
+ *      description: User Login with Google
  *      responses: 
  *          200:
- *              description: post token in db
+ *              description:Login succesful, post token in DB
  */
 router.post('/login/google', usersController.googleLogin);
 
 /**
  * @swagger
- * /:
+ * /user/getByToken:
  *  get:
- *      description: get from Database
+ *      description: get the user by the current token
  *      responses: 
  *          200:
- *              description: get Data from DataBase and render with handlebars
+ *              description:data of the current user
  */
 router.get('/getByToken', usersController.getUserByToken);
 
 /**
  * @swagger
- * /:
- *  update:
- *      description: get from Database
+ * /user/update:
+ *  put:
+ *      description: update the current User´s password
  *      responses: 
  *          200:
- *              description: get Data from DataBase and render with handlebars
+ *              description:password updated
  */
 router.put('/update', usersController.setPassword);
 
