@@ -5,23 +5,23 @@ const movieController = require('../src/controllers/movie.controller');
 
 /**
  * @swagger
- * /getOne:
+ * /getOneBack:
  *  get:
- *      description: get from API
+ *      description: get one movie from API
  *      responses: 
  *          200:
- *              description: get data from API and render  with handlebars in backend 
+ *              description: get data from API and render with handlebars in backend just to check connection.
  */
 router.get('/getOneBack', movieController.getOneBack);
 
 /**
  * @swagger
- * /getOne:
+ * /getOne/id:
  *  get:
- *      description: get from API
+ *      description: get a specfific movie from de API by id
  *      responses: 
  *          200:
- *              description: get data from API 
+ *              description: The json with the data of the requested movie
  */
 router.get('/getOne/:id', movieController.getOne);
 
@@ -29,10 +29,10 @@ router.get('/getOne/:id', movieController.getOne);
  * @swagger
  * /populars:
  *  get:
- *      description: get from API
+ *      description: get popular movies API
  *      responses: 
  *          200:
- *              description: get data from API and render  with handlebars 
+ *              description: JSON with all the popular movies in the API
  */
 router.get('/populars', movieController.getPopular);
 
@@ -51,21 +51,21 @@ router.get('/search', movieController.search);
  * @swagger
  * /similar:
  *  get:
- *      description: search movies from API
+ *      description: get similar movies from API
  *      responses: 
  *          200:
- *              description:Array of movies matching title with query string
+ *              description:Array of movies similar to the current movie
  */
 router.get('/similar', movieController.getSimilar);
 
 /**
  * @swagger
- * /similar:
+ * /get/category:
  *  get:
- *      description: search movies from API
+ *      description: get movies from API depending the category
  *      responses: 
  *          200:
- *              description:Array of movies matching title with query string
+ *              description:Array of movies matching the category
  */
 router.get('/get/:category?', movieController.getMovies);
 
