@@ -7,10 +7,10 @@ const toWatchController = require('./../src/controllers/toWatch.controller');
  * @swagger
  * /toWatch/get:
  *  get:
- *      description: get movies from API depending the category
+ *      description: get Watched movies of a user according to the current token
  *      responses: 
  *          200:
- *              description:Array of movies matching the category
+ *              description:an array with all the watched movies by the current user
  */
 router.get('/get', toWatchController.getToWatch);
 
@@ -19,10 +19,10 @@ router.get('/get', toWatchController.getToWatch);
  * @swagger
  * /toWatch/post:
  *  get:
- *      description: get movies from API depending the category
+ *      description: Post in DB a watched movie by the user with the current token
  *      responses: 
  *          200:
- *              description:Array of movies matching the category
+ *              description:success
  */
 router.post('/post', toWatchController.postToWatch);
 
@@ -30,10 +30,10 @@ router.post('/post', toWatchController.postToWatch);
  * @swagger
  * /toWatch/delete/id:
  *  get:
- *      description: get movies from API depending the category
+ *      description: Delete a movie from the Watched list of the user with the current token
  *      responses: 
  *          200:
- *              description:Array of movies matching the category
+ *              description:movie deleted
  */
 router.delete('/delete/:id', toWatchController.deleteToWatch);
 
