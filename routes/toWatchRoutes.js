@@ -7,10 +7,10 @@ const toWatchController = require('./../src/controllers/toWatch.controller');
  * @swagger
  * /:
  *  get:
- *      description: get 2 Watch list of a user according to the current token
+ *      description: get 2 Watch list from Database
  *      responses: 
  *          200:
- *              description: an array with all de 2 Watch movies stored in database
+ *              description: get Data from DataBase and render with handlebars
  */
 router.get('/get', toWatchController.getToWatch);
 
@@ -19,7 +19,7 @@ router.get('/get', toWatchController.getToWatch);
  * @swagger
  * /:
  *  post:
- *      description:Post in DB a movie ToWatch to the user with the current token
+ *      description: create a To Watch List for a User 
  *      responses: 
  *          200:
  *              description: success
@@ -30,7 +30,7 @@ router.post('/post', toWatchController.postToWatch);
  * @swagger
  * /:
  *  delete:
- *      description: Delete a movie from the ToWatch list of the user with the current token
+ *      description: create a To Watch List for a User 
  *      responses: 
  *          200:
  *              description: success
